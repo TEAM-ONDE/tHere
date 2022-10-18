@@ -13,9 +13,9 @@ import java.util.List;
 import onde.there.domain.Journey;
 import onde.there.domain.Place;
 import onde.there.domain.type.PlaceCategoryType;
-import onde.there.dto.place.PlaceDto;
-import onde.there.exception.PlaceException;
 import onde.there.exception.type.ErrorCode;
+import onde.there.place.exception.PlaceException;
+import onde.there.place.exception.type.PlaceErrorCode;
 import onde.there.place.service.PlaceService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -30,9 +30,6 @@ class PlaceControllerTest {
 
 	@MockBean
 	private PlaceService placeService;
-
-	@MockBean
-	private PlaceDto.Response response;
 
 	@InjectMocks
 	private PlaceController placeController;
@@ -68,14 +65,14 @@ class PlaceControllerTest {
 	public void test_01_01() throws Exception {
 		//given
 		given(placeService.getPlace(any())).willThrow(
-			new PlaceException(ErrorCode.NOT_FOUND_PLACE));
+			new PlaceException(PlaceErrorCode.NOT_FOUND_PLACE));
 
 		System.out.println(ErrorCode.NOT_FOUND_PLACE.getDescription());
 		//when
 		mvc.perform(get("/place/get?placeId=1"))
 			.andExpect(status().isBadRequest())
-			.andExpect(jsonPath("$.errorCode").value(ErrorCode.NOT_FOUND_PLACE.toString()))
-			.andExpect(jsonPath("$.errorMessage").value(ErrorCode.NOT_FOUND_PLACE.getDescription()))
+			.andExpect(jsonPath("$.placeErrorCode").value(PlaceErrorCode.NOT_FOUND_PLACE.toString()))
+			.andExpect(jsonPath("$.errorMessage").value(PlaceErrorCode.NOT_FOUND_PLACE.getDescription()))
 			.andDo(print());
 		//then
 	}
@@ -103,14 +100,14 @@ class PlaceControllerTest {
 	@Test
 	public void test_02_01() throws Exception {
 		//given
-		given(placeService.list(any())).willThrow(new PlaceException(ErrorCode.NOT_FOUND_JOURNEY));
+		given(placeService.list(any())).willThrow(new PlaceException(PlaceErrorCode.NOT_FOUND_JOURNEY));
 
 		//when
 		mvc.perform(get("/place/list?journeyId=1"))
 			.andExpect(status().isBadRequest())
-			.andExpect(jsonPath("$.errorCode").value(ErrorCode.NOT_FOUND_JOURNEY.toString()))
+			.andExpect(jsonPath("$.placeErrorCode").value(PlaceErrorCode.NOT_FOUND_JOURNEY.toString()))
 			.andExpect(
-				jsonPath("$.errorMessage").value(ErrorCode.NOT_FOUND_JOURNEY.getDescription()))
+				jsonPath("$.errorMessage").value(PlaceErrorCode.NOT_FOUND_JOURNEY.getDescription()))
 			.andDo(print());
 		//then
 	}
@@ -134,12 +131,12 @@ class PlaceControllerTest {
 	@Test
 	public void test_03_01() throws Exception {
 		//given
-		given(placeService.delete(any())).willThrow(new PlaceException(ErrorCode.NOT_FOUND_PLACE));
+		given(placeService.delete(any())).willThrow(new PlaceException(PlaceErrorCode.NOT_FOUND_PLACE));
 
 		//when
 		mvc.perform(delete("/place/delete?placeId=1"))
 			.andExpect(status().isBadRequest())
-			.andExpect(jsonPath("$.errorCode").value(ErrorCode.NOT_FOUND_PLACE.toString()))
+			.andExpect(jsonPath("$.placeErrorCode").value(PlaceErrorCode.NOT_FOUND_PLACE.toString()))
 			.andDo(print())
 		;
 	}
@@ -162,12 +159,12 @@ class PlaceControllerTest {
 	@Test
 	public void test_04_01() throws Exception {
 		//given
-		given(placeService.deleteAll(any())).willThrow(new PlaceException(ErrorCode.NOT_FOUND_JOURNEY));
+		given(placeService.deleteAll(any())).willThrow(new PlaceException(PlaceErrorCode.NOT_FOUND_JOURNEY));
 
 		//when
 		mvc.perform(delete("/place/delete-all?journeyId=1"))
 			.andExpect(status().isBadRequest())
-			.andExpect(jsonPath("$.errorCode").value(ErrorCode.NOT_FOUND_JOURNEY.toString()))
+			.andExpect(jsonPath("$.placeErrorCode").value(ErrorCode.NOT_FOUND_JOURNEY.toString()))
 			.andDo(print());
 
 		//then
@@ -177,12 +174,12 @@ class PlaceControllerTest {
 	@Test
 	public void test_04_02() throws Exception {
 		//given
-		given(placeService.deleteAll(any())).willThrow(new PlaceException(ErrorCode.DELETED_NOTING));
+		given(placeService.deleteAll(any())).willThrow(new PlaceException(PlaceErrorCode.DELETED_NOTING));
 
 		//when
 		mvc.perform(delete("/place/delete-all?journeyId=1"))
 			.andExpect(status().isBadRequest())
-			.andExpect(jsonPath("$.errorCode").value(ErrorCode.DELETED_NOTING.toString()))
+			.andExpect(jsonPath("$.placeErrorCode").value(PlaceErrorCode.DELETED_NOTING.toString()))
 			.andDo(print());
 
 		//then

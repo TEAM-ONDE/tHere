@@ -4,9 +4,9 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import onde.there.domain.Journey;
 import onde.there.domain.Place;
-import onde.there.exception.PlaceException;
-import onde.there.exception.type.ErrorCode;
 import onde.there.journey.repository.JourneyRepository;
+import onde.there.place.exception.PlaceException;
+import onde.there.place.exception.type.PlaceErrorCode;
 import onde.there.place.repository.PlaceRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,12 +22,12 @@ public class PlaceService {
 
 	public Place getPlace(Long placeId) {
 		return placeRepository.findById(placeId)
-			.orElseThrow(() -> new PlaceException(ErrorCode.NOT_FOUND_PLACE));
+			.orElseThrow(() -> new PlaceException(PlaceErrorCode.NOT_FOUND_PLACE));
 	}
 
 	public List<Place> list(Long journeyId) {
 		Journey journey = journeyRepository.findById(journeyId)
-			.orElseThrow(() -> new PlaceException(ErrorCode.NOT_FOUND_JOURNEY));
+			.orElseThrow(() -> new PlaceException(PlaceErrorCode.NOT_FOUND_JOURNEY));
 
 		return placeRepository.findAllByJourneyOrderByPlaceTimeAsc(journey);
 	}
@@ -36,7 +36,7 @@ public class PlaceService {
 	public boolean delete(Long placeId) {
 		boolean exists = placeRepository.existsById(placeId);
 		if (!exists) {
-			throw new PlaceException(ErrorCode.NOT_FOUND_PLACE);
+			throw new PlaceException(PlaceErrorCode.NOT_FOUND_PLACE);
 		}
 
 		placeRepository.deleteById(placeId);
@@ -49,12 +49,12 @@ public class PlaceService {
 	@Transactional
 	public boolean deleteAll(Long journeyId) {
 		journeyRepository.findById(journeyId)
-			.orElseThrow(() -> new PlaceException(ErrorCode.NOT_FOUND_JOURNEY));
+			.orElseThrow(() -> new PlaceException(PlaceErrorCode.NOT_FOUND_JOURNEY));
 		//TODO : 장소에 포함된 모든 댓글 좋아요 이미지 삭제 구현 필요
 
 		Integer result = placeRepository.deleteAllByJourneyId(journeyId);
 		if (result == 0) {
-			throw new PlaceException(ErrorCode.DELETED_NOTING);
+			throw new PlaceException(PlaceErrorCode.DELETED_NOTING);
 		}
 
 		return true;

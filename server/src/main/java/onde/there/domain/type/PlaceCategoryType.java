@@ -3,8 +3,8 @@ package onde.there.domain.type;
 import java.util.Arrays;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import onde.there.exception.PlaceException;
-import onde.there.exception.type.ErrorCode;
+import onde.there.place.exception.PlaceException;
+import onde.there.place.exception.type.PlaceErrorCode;
 
 @Getter
 @RequiredArgsConstructor
@@ -28,6 +28,6 @@ public enum PlaceCategoryType {
 	public static PlaceCategoryType toPlaceCategoryType(String s) {
 		return Arrays.stream(PlaceCategoryType.values())
 			.filter(x -> s.equals(x.getDescription())).findFirst()
-			.orElseThrow(() -> new PlaceException(ErrorCode.MISMATCH_PLACE_CATEGORY_TYPE));
+			.orElseThrow(() -> new PlaceException(PlaceErrorCode.MISMATCH_PLACE_CATEGORY_TYPE));
 	}
 }

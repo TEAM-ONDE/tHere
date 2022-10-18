@@ -8,9 +8,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 import onde.there.domain.Journey;
 import onde.there.domain.Place;
-import onde.there.exception.PlaceException;
-import onde.there.exception.type.ErrorCode;
 import onde.there.journey.repository.JourneyRepository;
+import onde.there.place.exception.PlaceException;
+import onde.there.place.exception.type.PlaceErrorCode;
 import onde.there.place.repository.PlaceRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -60,7 +60,7 @@ class PlaceServiceTest {
 		PlaceException exception = assertThrows(PlaceException.class,
 			() -> placeService.getPlace(1L));
 		//then
-		assertEquals(exception.getErrorCode(), ErrorCode.NOT_FOUND_PLACE);
+		assertEquals(exception.getPlaceErrorCode(), PlaceErrorCode.NOT_FOUND_PLACE);
 	}
 
 	@DisplayName("02_00. list success")
@@ -94,9 +94,9 @@ class PlaceServiceTest {
 			() -> placeService.list(1L));
 
 		//then
-		assertEquals(placeException.getErrorCode(), ErrorCode.NOT_FOUND_JOURNEY);
+		assertEquals(placeException.getPlaceErrorCode(), PlaceErrorCode.NOT_FOUND_JOURNEY);
 		assertEquals(placeException.getErrorMessage(),
-			ErrorCode.NOT_FOUND_JOURNEY.getDescription());
+			PlaceErrorCode.NOT_FOUND_JOURNEY.getDescription());
 
 	}
 
@@ -123,7 +123,7 @@ class PlaceServiceTest {
 			() -> placeService.delete(100011L));
 
 		//then
-		assertEquals(placeException.getErrorCode(), ErrorCode.NOT_FOUND_PLACE);
+		assertEquals(placeException.getPlaceErrorCode(), PlaceErrorCode.NOT_FOUND_PLACE);
 	}
 
 	@DisplayName("04_00. deleteAll success")
@@ -156,7 +156,7 @@ class PlaceServiceTest {
 			() -> placeService.deleteAll(save.getId()));
 
 		//then
-		assertEquals(placeException.getErrorCode(), ErrorCode.DELETED_NOTING);
+		assertEquals(placeException.getPlaceErrorCode(), PlaceErrorCode.DELETED_NOTING);
 	}
 
 	@DisplayName("04_02. deleteAll fail not found journeyId")
@@ -168,6 +168,6 @@ class PlaceServiceTest {
 			() -> placeService.deleteAll(1L));
 
 		//then
-		assertEquals(placeException.getErrorCode(), ErrorCode.NOT_FOUND_JOURNEY);
+		assertEquals(placeException.getPlaceErrorCode(), PlaceErrorCode.NOT_FOUND_JOURNEY);
 	}
 }
