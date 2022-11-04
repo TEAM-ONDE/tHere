@@ -2,46 +2,9 @@ spring:
   config:
     import:
       - classpath:awsS3.yml
+      - classpath:db-connection.yml
+      - classpath:mail.yml
       - classpath:oauth2.yml
-  redis:
-    host: localhost
-    port: 6379
-  datasource:
-    hikari:
-      maximum-pool-size: 20
-    url: jdbc:h2:mem:test
-    username: sa
-    password:
-    driverClassName: org.h2.Driver
-#    url: jdbc:mysql://localhost:3306/there?serverTimezone=Asia/Seoul
-#    username:
-#    password:
-#    driverClassName: com.mysql.cj.jdbc.Driver
-
-  h2:
-    console:
-      enabled: true
-  jpa:
-    defer-datasource-initialization: true
-    database-platform: H2
-    hibernate:
-      ddl-auto: create-drop
-    open-in-view: false
-    properties:
-      hibernate:
-        format_sql: true
-        show_sql: true
-  mail:
-    host: smtp.gmail.com
-    port: 587
-    username:
-    password:
-    properties:
-      mail:
-        smtp:
-          starttls:
-            enable: true
-          auth: true
 
 springdoc:
   swagger-ui:
